@@ -1,0 +1,45 @@
+//
+//  Post.swift
+//  InstagramPlus
+//
+//  Created by Zsolt Gabor on 10/09/2026.
+//
+
+import Foundation
+struct Post: Identifiable, Hashable, Codable {
+    let id: String
+    let ownerUid: String
+    let caption: String
+    var likes: Int?
+    let imageUrl: String
+    let timestamp: Date
+
+    var user: User?
+    
+    var didLike: Bool = false
+    var didSave: Bool = false
+    
+    init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.id = try container.decode(String.self, forKey: .id)
+        self.ownerUid = try container.decode(String.self, forKey: .ownerUid)
+        self.caption = try container.decode(String.self, forKey: .caption)
+        self.likes = try container.decodeIfPresent(Int.self, forKey: .likes)
+        self.imageUrl = try container.decode(String.self, forKey: .imageUrl)
+        self.timestamp = try container.decode(Date.self, forKey: .timestamp)
+        self.didLike = try container.decodeIfPresent(Bool.self, forKey: .didLike) ?? false
+        self.didSave = try container.decodeIfPresent(Bool.self, forKey: .didSave) ?? false
+    }
+    
+    init(id: String, ownerUid: String, caption: String, likes: Int? = nil, imageUrl: String, timestamp: Date, user: User? = nil, didLike: Bool = false, didSave: Bool = false) {
+        self.id = id
+        self.ownerUid = ownerUid
+        self.caption = caption
+        self.likes = likes
+        self.imageUrl = imageUrl
+        self.timestamp = timestamp
+        self.user = user
+        self.didLike = didLike
+        self.didSave = didSave
+    }
+}
